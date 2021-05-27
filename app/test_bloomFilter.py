@@ -5,6 +5,15 @@ from BloomFilter import *
 class TestHashOne(unittest.TestCase):
     def setUp(self) -> None:
         self.name = 'pete'
+        self.filter = 0
+        self.hashed_name = [58, 38, 46]
+        self.data_array = ['tom', 'dick', 'harry', 'jane', 'pete']
+
+    def tearDown(self) -> None:
+        del self.name
+        del self.filter
+        del self.hashed_name
+        del self.data_array
 
     def test_hash1(self):
         hash = hash1(self.name)
@@ -19,13 +28,43 @@ class TestHashOne(unittest.TestCase):
         self.assertEqual(True, hash == 46)
 
     def test_getAddedCharsInString(self):
-        integer_rep = getAddedCharsInString(self.name)
+        integer_rep = getaddedcharsinstring(self.name)
         self.assertEqual(True, integer_rep == 430)
 
-    def test_hashsName(self):
-        hashs_array = hashsName(self.name)
-        self.assertEqual(True, len(hashs_array) == 3)
+    def test_hashesname(self):
+        hashes_array = hashesname(self.name)
+        self.assertEqual(True, len(hashes_array) == 3)
 
+    def test_setbloombit(self):
+        hash = hash1(self.name)
+        self.filter = setbloombit(self.filter, hash)
+        self.assertEqual(True, self.filter > 0)
+
+    def test_checkbloomfilterbit(self):
+        self.filter = setbloombit(self.filter, hash1(self.name))
+        isSet = checkbloomfilterbit(self.filter, hash1(self.name))
+        self.assertEqual(True, isSet)
+        isSet = checkbloomfilterbit(self.filter, hash2(self.name))
+        self.assertEqual(False, isSet)
+
+    def test_buildbloomfilter(self):
+        bloom_filter = buildbloomfilter(self.data_array)
+        print(bloom_filter);
+        print(bin(bloom_filter))
+        isSet = checkbloomfilterbit(bloom_filter, hash1(self.name))
+        self.assertEqual(True, isSet)
+
+    def test_addnametofilter(self):
+        bloom_filter = 0
+        bloom_filter = addnametofilter(bloom_filter, self.hashed_name)
+        isSet = checknameinbloomfilter(bloom_filter, self.hashed_name)
+        self.assertEqual(True, isSet)
+
+    def test_checknameinbloomfilter(self):
+        bloom_filter = 0
+        bloom_filter = addnametofilter(bloom_filter, self.hashed_name)
+        isSet = checkbloomfilterbit(self.filter, hash2(self.name))
+        self.assertEqual(False, isSet)
 
 if __name__ == '__main__':
     unittest.main()
