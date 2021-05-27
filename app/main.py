@@ -11,12 +11,12 @@ print('The bloom filter size is: ' + str(bloom_filter_size))
 #
 # hash_number = input("How many hash's do you want to use? (1-3) ")
 
-print('The False Positive rate limit is set to: %' + str(getlimit()))
+print('The False Positive rate limit is set to: %' + str(get_limit()))
 
-bloom_filter = buildbloomfilter(data_array)
+bloom_filter = build_bloom_filter(data_array)
 
 print('The Bloom filter is: ' + bin(bloom_filter))
-print('The False Positive Rate  is: %' + str(getfprate()))
+print('The False Positive Rate  is: %' + str(get_fp_rate()))
 print('')
 additions = 1
 
@@ -25,21 +25,21 @@ while True:
     print('Entry ' + str(additions))
     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
     new_name = input('What would you like to add to the data set? ')
-    is_in_set = checknameinbloomfilter(bloom_filter, new_name)
+    is_in_set = check_name_in_bloom_filter(bloom_filter, new_name)
 
     if is_in_set:
         print('Sorry the name exists. Please choose a different name')
     else:
         print('Name is not in set. You can use it')
-        bloom_filter = addnametobloomfilter(bloom_filter, new_name)
+        bloom_filter = add_name_to_bloom_filter(bloom_filter, new_name)
         data_array.append(new_name)
         print('The new data set is array is: ')
         print(data_array)
         additions += 1
         print('The New Bloom Filter is: ' + bin(bloom_filter))
-        print('The New False Positive Rate  is: %' + str(getfprate()))
+        print('The New False Positive Rate  is: %' + str(get_fp_rate()))
 
-    if getfprate() > fp_limit:
+    if get_fp_rate() > fp_limit:
         print('The False Positive Rate is too high. Please consider adding')
         print('a larger Bloom filter or more hash functions.')
 
