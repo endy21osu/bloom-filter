@@ -6,8 +6,7 @@ class TestHashOne(unittest.TestCase):
         self.bloom_filter = BloomFilter(256)
         self.name = 'pete'
         self.filter = 0
-        self.hashed_name = [58, 38, 46]
-        # self.hashed_name = [26, 6, 14]
+        self.hashed_name = [186, 38, 174]
         self.data_array = ['tom', 'dick', 'harry', 'jane', 'pete']
 
     def tearDown(self) -> None:
