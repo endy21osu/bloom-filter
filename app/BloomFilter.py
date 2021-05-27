@@ -1,21 +1,25 @@
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 data_array = ['tom', 'dick', 'harry', 'jane']
 bloom_filter_size = 64
 
 def hash1(name):
     result = (getaddedcharsinstring(name) * 107) % bloom_filter_size
-    print('Hash1 ' + str(result))
+    logging.debug("Hash 1 {}".format(str(result)))
     return result
 
 
 def hash2(name):
     result = (getaddedcharsinstring(name) * 37) % bloom_filter_size
-    print('Hash2 ' + str(result))
+    logging.debug("Hash 2 {}".format(str(result)))
     return result
 
 
 def hash3(name):
     result = (getaddedcharsinstring(name) * 257) % bloom_filter_size
-    print('Hash3 ' + str(result))
+    logging.debug("Hash 3 {}".format(str(result)))
     return result
 
 
@@ -39,18 +43,26 @@ def checkbloomfilterbit(bloom_filter, bit_location):
 def buildbloomfilter(data_set):
     bloom_filter = 0
     for name in data_set:
-        name_hash_keys = hashesname(name)
-        bloom_filter = addnametofilter(bloom_filter, name_hash_keys)
+        bloom_filter = addnametobloomfilter(bloom_filter, name)
+    logging.debug("The data set {}".format(data_set))
+    logging.debug("Has the following Bloom Filter {}".format(bin(bloom_filter)))
     return bloom_filter
 
 
-def addnametofilter(bloom_filter, name_hash_set):
+def addnametobloomfilter(bloom_filter, name):
+    name_hash_keys = hashesname(name)
+    bloom_filter = addhashtofilter(bloom_filter, name_hash_keys)
+    return bloom_filter
+
+
+def addhashtofilter(bloom_filter, name_hash_set):
     for hash in name_hash_set:
         bloom_filter = setbloombit(bloom_filter, hash)
     return bloom_filter
 
 
-def checknameinbloomfilter(bloom_filter, name_hash_set):
+def checknameinbloomfilter(bloom_filter, name):
+    name_hash_set = hashesname(name)
     for hash in name_hash_set:
         if(checkbloomfilterbit(bloom_filter, hash)):
             return True
@@ -62,8 +74,5 @@ def hashesname(name):
     hash_keys.append(hash1(name))
     hash_keys.append(hash2(name))
     hash_keys.append(hash3(name))
-    print(hash_keys)
+    logging.debug("Hash Keys for name {} are {}".format(name, hash_keys))
     return hash_keys
-
-
-# hashsName(input("what name do you want to check the bloom filter? "))
