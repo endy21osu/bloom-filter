@@ -1,9 +1,17 @@
 import logging
+import math
 
 logging.basicConfig(level=logging.INFO)
 
-data_array = ['tom', 'dick', 'harry', 'jane']
+data_array = ['tom', 'dick', 'harry', 'jane', 'jeff', 'aura', 'ham', 'angelina',
+              'clarence', 'judy', 'rodriguez', 'torres']
 bloom_filter_size = 64
+fp_limit = .1
+
+
+def getlimit():
+    return fp_limit * float(100)
+
 
 def hash1(name):
     result = (getaddedcharsinstring(name) * 107) % bloom_filter_size
@@ -46,6 +54,7 @@ def buildbloomfilter(data_set):
         bloom_filter = addnametobloomfilter(bloom_filter, name)
     logging.debug("The data set {}".format(data_set))
     logging.debug("Has the following Bloom Filter {}".format(bin(bloom_filter)))
+    getfprate()
     return bloom_filter
 
 
@@ -76,3 +85,12 @@ def hashesname(name):
     hash_keys.append(hash3(name))
     logging.debug("Hash Keys for name {} are {}".format(name, hash_keys))
     return hash_keys
+
+# ref https://en.wikipedia.org/wiki/Bloom_filter
+def getfprate():
+    number_of_hashes = 3
+    number_of_elements = len(data_array)
+    power_base = 1 - math.exp(-(number_of_hashes * number_of_elements)/bloom_filter_size)
+    fp_rate = math.pow(power_base, number_of_hashes)
+    logging.debug("root is %{}".format(fp_rate * 100))
+    return fp_rate

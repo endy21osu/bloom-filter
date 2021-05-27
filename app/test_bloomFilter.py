@@ -70,5 +70,9 @@ class TestHashOne(unittest.TestCase):
         isSet = checknameinbloomfilter(self.filter, self.name)
         self.assertEqual(False, isSet)
 
+    def test_getfprate(self):
+        fp_rate = getfprate()
+        self.assertEqual(True, fp_rate < fp_limit)
+
 if __name__ == '__main__':
     unittest.main()
