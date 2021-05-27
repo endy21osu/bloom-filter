@@ -49,21 +49,25 @@ class TestHashOne(unittest.TestCase):
 
     def test_buildbloomfilter(self):
         bloom_filter = buildbloomfilter(self.data_array)
-        print(bloom_filter);
-        print(bin(bloom_filter))
         isSet = checkbloomfilterbit(bloom_filter, hash1(self.name))
         self.assertEqual(True, isSet)
 
-    def test_addnametofilter(self):
+    def test_addhashtofilter(self):
         bloom_filter = 0
-        bloom_filter = addnametofilter(bloom_filter, self.hashed_name)
-        isSet = checknameinbloomfilter(bloom_filter, self.hashed_name)
+        bloom_filter = addhashtofilter(bloom_filter, self.hashed_name)
+        isSet = checknameinbloomfilter(bloom_filter, self.name)
+        self.assertEqual(True, isSet)
+
+    def test_addnametobloomfilter(self):
+        bloom_filter = 0
+        bloom_filter = addnametobloomfilter(bloom_filter, self.name)
+        isSet = checknameinbloomfilter(bloom_filter, self.name)
         self.assertEqual(True, isSet)
 
     def test_checknameinbloomfilter(self):
         bloom_filter = 0
-        bloom_filter = addnametofilter(bloom_filter, self.hashed_name)
-        isSet = checkbloomfilterbit(self.filter, hash2(self.name))
+        bloom_filter = addhashtofilter(bloom_filter, self.hashed_name)
+        isSet = checknameinbloomfilter(self.filter, self.name)
         self.assertEqual(False, isSet)
 
 if __name__ == '__main__':
