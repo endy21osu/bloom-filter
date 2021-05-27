@@ -3,7 +3,7 @@ import math
 from random import choice
 from string import ascii_uppercase
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('Mariner')
 
 
