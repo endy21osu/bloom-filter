@@ -5,6 +5,7 @@ logging.basicConfig(level=logging.INFO)
 
 data_array = ['tom', 'dick', 'harry', 'jane', 'jeff', 'aura', 'ham', 'angelina',
               'clarence', 'judy', 'rodriguez']
+
 bloom_filter_size = 64
 fp_limit = .1
 
@@ -39,21 +40,37 @@ def get_added_chars_in_string(name):
 
 
 def set_bloom_bit(bloom_filter, bit_location):
-    return bloom_filter | 1 << bit_location
+    bit_location_index = bit_location
+    mask = 1 << bit_location_index
+    updated_bloom_filter = bloom_filter | mask
+    logging.debug("**set_bloom_bit**")
+    logging.debug("Bit location {}".format(bit_location_index))
+    logging.debug("Filter {}".format(print_bloom_filter_bit_array(bloom_filter)))
+    logging.debug("pos    {}\n".format(print_bit_position(bloom_filter)))
+
+    logging.debug("mask  {}".format(print_bloom_filter_bit_array(mask)))
+    logging.debug("pos   {}\n".format(print_bit_position(mask)))
+
+    logging.debug("result  {}".format(print_bloom_filter_bit_array(updated_bloom_filter)))
+    logging.debug("pos     {}\n".format(print_bit_position(updated_bloom_filter)))
+    return updated_bloom_filter
 
 
 def check_bloom_filter_bit(bloom_filter, bit_location):
     bit_location_index = bit_location
+    mask = 1 << bit_location_index
+    logging.debug("**check_bloom_filter_bit**")
+    is_in_filter = bloom_filter & mask
     logging.debug("Bit location {}".format(bit_location_index))
-    logging.debug("Filter {}".format(get_bloom_filter_array(bloom_filter)))
-    logging.debug("pos    {}\n".format(get_bit_number(bloom_filter)))
+    logging.debug("Filter {}".format(print_bloom_filter_bit_array(bloom_filter)))
+    logging.debug("pos    {}\n".format(print_bit_position(bloom_filter)))
 
-    logging.debug("mask  {}".format(get_bloom_filter_array(1 << bit_location_index)))
-    logging.debug("pos   {}\n".format(get_bit_number(1 << bit_location_index)))
+    logging.debug("mask  {}".format(print_bloom_filter_bit_array(mask)))
+    logging.debug("pos   {}\n".format(print_bit_position(mask)))
 
-    logging.debug("result  {}".format(get_bloom_filter_array(bloom_filter & (1 << bit_location_index))))
-    logging.debug("pos     {}\n".format(get_bit_number(bloom_filter & (1 << bit_location_index))))
-    if bloom_filter & (1 << bit_location_index):
+    logging.debug("result  {}".format(print_bloom_filter_bit_array(is_in_filter)))
+    logging.debug("pos     {}\n".format(print_bit_position(is_in_filter)))
+    if is_in_filter:
         logging.debug("True")
         return True
     logging.debug("False")
@@ -89,7 +106,7 @@ def check_name_in_bloom_filter(bloom_filter, name):
         return check_bloom_filter_bit(bloom_filter, current_hash)
 
 
-def get_bloom_filter_array(bloom_filter):
+def print_bloom_filter_bit_array(bloom_filter):
     bit_array = []
     bits = str(bin(bloom_filter))
     for char in bits:
@@ -97,7 +114,7 @@ def get_bloom_filter_array(bloom_filter):
     return bit_array
 
 
-def get_bit_number(bloom_filter):
+def print_bit_position(bloom_filter):
     bit_numbers = []
     bits = str(bin(bloom_filter))
     count = len(bits)
